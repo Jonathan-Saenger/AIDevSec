@@ -23,10 +23,10 @@
         :class="{ 'active': isMenuOpen }"
         @click="closeMenu"
       >
-        <router-link to="/" class="nav-link">Accueil</router-link>
-        <router-link to="/articles" class="nav-link">Articles</router-link>
-        <router-link to="/about" class="nav-link">Présentation</router-link>
-        <router-link to="/contact" class="nav-link">Contact</router-link>
+        <a href="#" @click.prevent="scrollToSection('hero')" class="nav-link">Accueil</a>
+        <a href="#articles" @click.prevent="scrollToSection('latest-articles')" class="nav-link">Articles</a>
+        <a href="#presentation" @click.prevent="scrollToSection('presentation')" class="nav-link">Présentation</a>
+        <a href="#contact" @click.prevent="scrollToSection('contact')" class="nav-link">Contact</a>
       </div>
     </div>
   </nav>
@@ -43,6 +43,14 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
   isMenuOpen.value = false;
+};
+
+const scrollToSection = (sectionId) => {
+  const element = document.querySelector(`.${sectionId}`);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+    closeMenu();
+  }
 };
 
 // Fermer le menu quand on clique en dehors

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="hero">
+    <section class="hero scroll-section" id="hero">
       <div class="hero-content">
         <h1 class="hero-title neon-text">IA : Dev // Sec</h1>
         <p class="hero-slogan">La sécurité du Développement Web à l'ère de l'Intelligence Artificielle</p>
@@ -10,7 +10,7 @@
       </div>
     </section>
 
-    <section class="latest-articles">
+    <section class="latest-articles scroll-section" id="articles">
       <h2 class="section-title neon-text">Derniers Articles</h2>
       <div class="articles-grid">
         <article v-for="i in 3" :key="i" class="article-card">
@@ -21,8 +21,69 @@
         </article>
       </div>
     </section>
+
+    <section class="presentation scroll-section" id="presentation">
+      <h2 class="section-title neon-text">Présentation</h2>
+      <div class="presentation-content">
+        <div class="text-content">
+          <h3>Ce qui je suis avant tout : un passionné ...</h3>
+          <p>...de Développement Web, des nouvelles tendances de l'intelligence artificielle et des solutions à la sécurité. Contenu de ma présentation</p>
+        </div>
+        <div class="image-content">
+          <img src="https://via.placeholder.com/400x200" alt="Image de présentation">
+        </div>
+      </div>
+    </section>
+
+    <section class="contact scroll-section" id="contact">
+      <h2 class="section-title neon-text">Contact</h2>
+      <form class="contact-form" @submit.prevent="submitForm">
+        <div class="form-group">
+          <label for="name">Nom & Prénom</label>
+          <input type="text" id="name" v-model="form.name" :disabled="loading" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model="form.email" :disabled="loading" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Votre Message</label>
+          <textarea id="message" v-model="form.message" rows="5" :disabled="loading" required></textarea>
+        </div>
+        <button type="submit" class="terminal-btn" :disabled="loading">
+          {{ loading ? 'Envoi en cours...' : 'Envoyer' }}
+        </button>
+      </form>
+    </section>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        name: '',
+        email: '',
+        message: '',
+      },
+      loading: false,
+    };
+  },
+  methods: {
+    async submitForm() {
+      this.loading = true;
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log('Formulaire soumis :', this.form);
+      this.form.name = '';
+      this.form.email = '';
+      this.form.message = '';
+      this.loading = false;
+      alert('Message envoyé avec succès !');
+    },
+  },
+};
+</script>
 
 <style scoped>
 .home {
@@ -38,6 +99,7 @@
   overflow: hidden;
 }
 
+/* TEMPLATE D'ACCUEIL */
 .cyber-background {
   position: absolute;
   top: 0;
@@ -165,7 +227,7 @@
 }
 
 .latest-articles {
-  padding: 4rem var(--container-padding);
+  padding: 2rem var(--container-padding);
   max-width: 1440px;
   margin: 0 auto;
   position: relative;
@@ -252,4 +314,145 @@
     font-size: 2rem;
   }
 }
+
+/* TEMPLATE DE PRESENTATION */
+.presentation {
+  padding: 2rem var(--container-padding);
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.presentation-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.text-content {
+  flex: 1;
+}
+
+.image-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .presentation-content {
+    flex-direction: column;
+  }
+
+  .image-content {
+    order: 2; /* Image au milieu en mobile */
+  }
+
+  .text-content {
+    order: 3; /* Texte en bas en mobile */
+    text-align: center;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .presentation h2 {
+    order: 1; /* Titre en haut en mobile */
+  }
+}
+
+/* TEMPLATE DE CONTACT */
+.contact {
+  padding: 1rem var(--container-padding);
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-family: var(--font-heading);
+  color: var(--neon-circuit);
+  font-size: 1.1rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 2px solid var(--neon-circuit);
+  background: transparent;
+  color: var(--neon-circuit);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--quantum-pink);
+  outline: none;
+}
+
+.terminal-btn {
+  background: transparent;
+  color: var(--neon-circuit);
+  border: 2px solid var(--neon-circuit);
+  padding: 0.75rem 2rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  margin-top: 1rem;
+  width: 50%; 
+  max-width: 200px; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
+
+.terminal-btn:hover {
+  background: rgba(0, 243, 255, 0.1);
+  text-shadow: 0 0 5px var(--neon-circuit);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 2rem var(--container-padding);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 0.9rem;
+  }
+
+  .terminal-btn {
+    width: 60%; 
+    max-width: 150px; 
+    font-size: 0.9rem;
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+.scroll-section {
+  scroll-snap-align: start;
+}
+
 </style>
