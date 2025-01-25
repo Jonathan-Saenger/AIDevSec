@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@300;500&display=swap');
+
+:root {
+  /* Color Palette */
+  --cyber-void: #0A0F1F;        /* Fond principal */
+  --neon-circuit: #00F3FF;      /* Accents interactifs */
+  --quantum-pink: #FF009E;      /* Points focaux */
+  --hologram-green: #B1FF00;    /* Badges/Statuts */
+  --carbon: #1A1A1A;            /* Surfaces */
+  --data-stream: #E0E0E0;       /* Texte */
+
+  /* Typography */
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+}
+
+/* Global Styles */
+body {
+  background-color: var(--cyber-void);
+  color: var(--data-stream);
+  font-family: var(--font-body);
+  line-height: 1.8;
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.05em;
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Utility Classes */
+.neon-text {
+  text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+.cyber-gradient {
+  background: linear-gradient(90deg, var(--neon-circuit), var(--quantum-pink));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Responsive Breakpoints */
+@media screen and (max-width: 390px) {
+  :root {
+    --container-padding: 1rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  :root {
+    --container-padding: 2rem;
+  }
+}
+
+/* Accessibility */
+:focus {
+  outline: 2px dashed var(--neon-circuit);
+  outline-offset: 2px;
+}
