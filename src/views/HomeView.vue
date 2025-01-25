@@ -6,7 +6,7 @@
         <p class="hero-slogan">La sécurité du Développement Web à l'ère de l'Intelligence Artificielle</p>
       </div>
       <div class="cyber-background">
-        <div class="cyber-particles"></div>
+         <div class="cyber-particles"></div>
       </div>
     </section>
 
