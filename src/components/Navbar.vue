@@ -123,6 +123,7 @@ window.addEventListener('resize', () => {
   padding: 1rem;
   z-index: 1001;
   position: relative;
+  margin-left: auto;
 }
 
 .burger-line {
@@ -183,6 +184,8 @@ window.addEventListener('resize', () => {
 @media screen and (max-width: 768px) {
   .burger-menu {
     display: block;
+    margin-left: auto;
+    padding: 0.5rem;
   }
 
   .nav-links {
@@ -195,7 +198,7 @@ window.addEventListener('resize', () => {
     border-bottom: 2px solid var(--neon-circuit);
     padding: 2rem;
     gap: 1.5rem;
-    width: 250px;
+    width: 280px;
     backdrop-filter: blur(5px);
   }
 
