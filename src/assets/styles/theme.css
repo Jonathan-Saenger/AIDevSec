@@ -9,6 +9,10 @@
   --carbon: #1A1A1A;            /* Surfaces */
   --data-stream: #E0E0E0;       /* Texte */
 
+    /* Variables RGB pour les effets de transparence */
+    --neon-circuit-rgb: 0, 243, 255;
+    --hologram-green-rgb: 177, 255, 0;
+    
   /* Typography */
   --font-heading: 'Orbitron', sans-serif;
   --font-body: 'Rajdhani', sans-serif;
