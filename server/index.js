@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import articleRoutes from './routes/articleRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 // Configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch((error) => console.error('Erreur de connexion MongoDB:', error));
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api', articleRoutes);
 
 // Route de test
