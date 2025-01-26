@@ -23,7 +23,18 @@ const articleSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['IA & SÉCURITÉ', 'DÉVELOPPEMENT', 'CYBERSÉCURITÉ', 'INTELLIGENCE ARTIFICIELLE']
+    enum: [
+        'SÉCURITÉ', 
+        'DÉVELOPPEMENT', 
+        'ÉTHIQUE', 
+        'IA', 
+        'TUTORIEL', 
+        'CYBERSÉCURITÉ', 
+        'DONNÉES', 
+        'API', 
+        'RÉGULATIONS', 
+        'INNOVATION'
+      ]
   },
   tags: [{
     type: String,
