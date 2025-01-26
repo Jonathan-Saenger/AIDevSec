@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="hero scroll-section" id="hero">
+    <section class="hero" id="hero">
       <div class="hero-content">
         <h1 class="hero-title neon-text">IA : Dev // Sec</h1>
         <p class="hero-slogan">La sécurité du Développement Web à l'ère de l'Intelligence Artificielle</p>
@@ -10,7 +10,7 @@
       </div>
     </section>
 
-    <section class="latest-articles scroll-section" id="articles">
+    <section class="latest-articles" id="latest-articles">
       <h2 class="section-title neon-text">Derniers Articles</h2>
       <div class="articles-grid">
         <article v-for="i in 3" :key="i" class="article-card">
@@ -22,7 +22,7 @@
       </div>
     </section>
 
-    <section class="presentation scroll-section" id="presentation">
+    <section class="presentation" id="presentation">
       <h2 class="section-title neon-text">Présentation</h2>
       <div class="presentation-content">
         <div class="text-content">
@@ -35,7 +35,7 @@
       </div>
     </section>
 
-    <section class="contact scroll-section" id="contact">
+    <section class="contact" id="contact">
       <h2 class="section-title neon-text">Contact</h2>
       <form class="contact-form" @submit.prevent="submitForm">
         <div class="form-group">

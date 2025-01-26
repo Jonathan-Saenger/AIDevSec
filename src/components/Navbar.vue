@@ -46,10 +46,21 @@ const closeMenu = () => {
 };
 
 const scrollToSection = (sectionId) => {
-  const element = document.querySelector(`.${sectionId}`);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
+  try {
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+
+    const navbar = document.querySelector('.navbar');
+    const offset = navbar ? navbar.offsetHeight : 0;
+
+    window.scrollTo({
+      top: element.offsetTop - offset,
+      behavior: 'smooth'
+    });
+
     closeMenu();
+  } catch (e) {
+    console.error('Scroll error:', e);
   }
 };
 
