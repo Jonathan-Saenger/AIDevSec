@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import articleRoutes from './routes/articleRoutes.js';
 
 // Configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -22,12 +23,15 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connecté à MongoDB Atlas'))
   .catch((error) => console.error('Erreur de connexion MongoDB:', error));
 
-// Routes de base
+// Routes
+app.use('/api', articleRoutes);
+
+// Route de test
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API fonctionnelle !' });
 });
 
-// Démarrage du serveur
+// Serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
