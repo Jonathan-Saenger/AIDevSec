@@ -1,88 +1,122 @@
 <template>
   <footer class="footer">
-    <div class="footer-container">
-      <button class="terminal-btn" @click="toggleTerminal">
-        TERMINAL
-        <div class="scanline"></div>
-      </button>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>À propos</h3>
+        <p>Exploration de la sécurité du développement web à l'ère de l'intelligence artificielle.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>contact@aidevsec.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Suivez-moi</h3>
+        <div class="social-links">
+          <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="#" target="_blank" rel="noopener">GitHub</a>
+          <a href="#" target="_blank" rel="noopener">Twitter</a>
+        </div>
+      </div>
     </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} AIDevSec. Tous droits réservés.</p>
+      <span class="admin-link" @click="showLoginForm" title="Administration">·</span>
+    </div>
+
+    <!-- Login Form Modal -->
+    <LoginForm ref="loginForm" />
   </footer>
 </template>
 
 <script setup>
-const toggleTerminal = () => {
-  // Terminal functionality to be implemented
-  console.log('Terminal toggled');
-}
+import { ref, computed } from 'vue';
+import LoginForm from './LoginForm.vue';
+
+const loginForm = ref(null);
+const currentYear = computed(() => new Date().getFullYear());
+
+const showLoginForm = () => {
+  loginForm.value?.toggleVisibility();
+};
 </script>
 
 <style scoped>
 .footer {
-  background-color: var(--carbon);
-  padding: 2rem var(--container-padding);
-  position: relative;
-  overflow: hidden;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 3rem 2rem 1rem;
+  margin-top: 4rem;
 }
 
-.footer-container {
-  max-width: 1440px;
+.footer-content {
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+  color: #4a9eff;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.footer-section p {
+  color: #999;
+  line-height: 1.6;
+}
+
+.social-links {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 1rem;
 }
 
-.terminal-btn {
-  background: transparent;
-  color: var(--neon-circuit);
-  border: 2px solid var(--neon-circuit);
-  padding: 0.75rem 2rem;
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  cursor: pointer;
+.social-links a {
+  color: #999;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #4a9eff;
+}
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  padding-top: 1rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
   position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
 }
 
-.terminal-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 243, 255, 0.2),
-    transparent
-  );
-  animation: scanline 2s linear infinite;
+.admin-link {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 0.5rem;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  font-size: 1.2rem;
+  vertical-align: middle;
 }
 
-.terminal-btn:hover {
-  background: rgba(0, 243, 255, 0.1);
-  text-shadow: 0 0 5px var(--neon-circuit);
-  transform: scale(1.05);
+.admin-link:hover {
+  opacity: 1;
 }
 
-.terminal-btn:hover::before {
-  animation: scanline 1s linear infinite;
-}
-
-@keyframes hologram {
-  0% {
-    opacity: 0.5;
-    transform: perspective(500px) rotateX(0deg);
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
-  100% {
-    opacity: 1;
-    transform: perspective(500px) rotateX(360deg);
-  }
-}
 
-.terminal-btn:hover {
-  animation: hologram 2s infinite linear;
+  .social-links {
+    justify-content: center;
+  }
 }
 </style>
