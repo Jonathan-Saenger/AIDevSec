@@ -1,9 +1,10 @@
 import express from 'express';
 import Article from '../models/Article.js';
+import { auth, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// GET All
+// Routes publiques (lecture)
 router.get('/articles', async (req, res) => {
   try {
     const articles = await Article.find({ published: true })
@@ -14,7 +15,6 @@ router.get('/articles', async (req, res) => {
   }
 });
 
-// GET by ID
 router.get('/articles/:id', async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
@@ -27,16 +27,11 @@ router.get('/articles/:id', async (req, res) => {
   }
 });
 
-// POST
-router.post('/articles', async (req, res) => {
+// Routes protégées (création, modification, suppression)
+router.post('/articles', auth, async (req, res) => {
   const article = new Article({
-    title: req.body.title,
-    content: req.body.content,
-    summary: req.body.summary,
-    category: req.body.category,
-    tags: req.body.tags,
-    imageUrl: req.body.imageUrl,
-    published: req.body.published || false
+    ...req.body,
+    author: req.user.username // Utilise le nom d'utilisateur connecté
   });
 
   try {
@@ -47,12 +42,16 @@ router.post('/articles', async (req, res) => {
   }
 });
 
-// PUT update by ID
-router.put('/articles/:id', async (req, res) => {
+router.put('/articles/:id', auth, async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
     if (!article) {
       return res.status(404).json({ message: 'Article non trouvé' });
+    }
+
+    // Vérifie si l'utilisateur est l'auteur ou admin
+    if (article.author !== req.user.username && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Non autorisé à modifier cet article' });
     }
 
     Object.assign(article, req.body);
@@ -63,8 +62,7 @@ router.put('/articles/:id', async (req, res) => {
   }
 });
 
-// DELETE
-router.delete('/articles/:id', async (req, res) => {
+router.delete('/articles/:id', auth, isAdmin, async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
     if (!article) {
@@ -78,7 +76,7 @@ router.delete('/articles/:id', async (req, res) => {
   }
 });
 
-// GET by catégorie
+// Routes de filtrage (publiques)
 router.get('/articles/category/:category', async (req, res) => {
   try {
     const articles = await Article.find({ 
@@ -91,11 +89,23 @@ router.get('/articles/category/:category', async (req, res) => {
   }
 });
 
-// GET by tag
 router.get('/articles/tag/:tag', async (req, res) => {
   try {
     const articles = await Article.find({ 
       tags: req.params.tag,
+      published: true 
+    }).sort({ createdAt: -1 });
+    res.json(articles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Route pour obtenir les articles d'un auteur spécifique
+router.get('/articles/author/:username', async (req, res) => {
+  try {
+    const articles = await Article.find({ 
+      author: req.params.username,
       published: true 
     }).sort({ createdAt: -1 });
     res.json(articles);
