@@ -34,6 +34,18 @@ const router = createRouter({
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/admin/article/new',
+      name: 'article-new',
+      component: () => import('../views/ArticleEditorView.vue'),
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/admin/article/:id',
+      name: 'article-edit',
+      component: () => import('../views/ArticleEditorView.vue'),
+      beforeEnter: requireAuth
     }
   ],
   // Comportement de défilement personnalisé
