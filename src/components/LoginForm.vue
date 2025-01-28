@@ -32,7 +32,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { secureApi } from '../services/api';
 
 const router = useRouter();
 const email = ref('');
@@ -46,7 +46,7 @@ const handleLogin = async () => {
         isLoading.value = true;
         error.value = '';
 
-        const response = await axios.post('http://localhost:5000/api/auth/login', {
+        const response = await secureApi.login({
             email: email.value, 
             password: password.value
         });
