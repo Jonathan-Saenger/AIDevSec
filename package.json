@@ -11,6 +11,11 @@
     "dev:server": "nodemon server/index.js"
   },
   "dependencies": {
+    "@tiptap/extension-image": "^2.11.3",
+    "@tiptap/extension-link": "^2.11.3",
+    "@tiptap/pm": "^2.11.3",
+    "@tiptap/starter-kit": "^2.11.3",
+    "@tiptap/vue-3": "^2.11.3",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
