@@ -1,17 +1,24 @@
 import express from 'express';
-import articleController from '../controllers/articleController.js';
-import { protect } from '../middleware/auth.js';
+import { auth } from '../middleware/auth.js';
+import {
+    getArticles,
+    getArticleById,
+    createArticle,
+    updateArticle,
+    deleteArticle,
+    togglePublishStatus
+} from '../controllers/articleController.js';
 
 const router = express.Router();
 
 // Routes publiques
-router.get('/', articleController.getArticles);
-router.get('/:id', articleController.getArticleById);
+router.get('/articles', getArticles);
+router.get('/articles/:id', getArticleById);
 
 // Routes protégées (nécessitent une authentification)
-router.post('/', protect, articleController.createArticle);
-router.put('/:id', protect, articleController.updateArticle);
-router.delete('/:id', protect, articleController.deleteArticle);
-router.patch('/:id/publish', protect, articleController.togglePublishStatus);
+router.post('/articles', auth, createArticle);
+router.put('/articles/:id', auth, updateArticle);
+router.delete('/articles/:id', auth, deleteArticle);
+router.patch('/articles/:id/publish', auth, togglePublishStatus);
 
 export default router;

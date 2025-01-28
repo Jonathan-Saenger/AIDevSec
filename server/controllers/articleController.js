@@ -1,7 +1,7 @@
-const Article = require('../models/Article');
+import Article from '../models/Article.js';
 
 // Obtenir tous les articles
-exports.getArticles = async (req, res) => {
+export const getArticles = async (req, res) => {
     try {
         const articles = await Article.find()
             .sort({ createdAt: -1 })
@@ -13,7 +13,7 @@ exports.getArticles = async (req, res) => {
 };
 
 // Obtenir un article par son ID
-exports.getArticleById = async (req, res) => {
+export const getArticleById = async (req, res) => {
     try {
         const article = await Article.findById(req.params.id)
             .populate('author', 'username');
@@ -29,7 +29,7 @@ exports.getArticleById = async (req, res) => {
 };
 
 // Créer un nouvel article
-exports.createArticle = async (req, res) => {
+export const createArticle = async (req, res) => {
     try {
         const { title, content, summary, category, tags, published } = req.body;
         
@@ -57,7 +57,7 @@ exports.createArticle = async (req, res) => {
 };
 
 // Mettre à jour un article
-exports.updateArticle = async (req, res) => {
+export const updateArticle = async (req, res) => {
     try {
         const { title, content, summary, category, tags, published } = req.body;
         
@@ -98,7 +98,7 @@ exports.updateArticle = async (req, res) => {
 };
 
 // Supprimer un article
-exports.deleteArticle = async (req, res) => {
+export const deleteArticle = async (req, res) => {
     try {
         const article = await Article.findById(req.params.id);
         
@@ -111,7 +111,7 @@ exports.deleteArticle = async (req, res) => {
             return res.status(403).json({ message: 'Non autorisé à supprimer cet article' });
         }
         
-        await article.remove();
+        await Article.findByIdAndDelete(req.params.id);
         res.json({ message: 'Article supprimé avec succès' });
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la suppression de l\'article' });
@@ -119,7 +119,7 @@ exports.deleteArticle = async (req, res) => {
 };
 
 // Publier/Dépublier un article
-exports.togglePublishStatus = async (req, res) => {
+export const togglePublishStatus = async (req, res) => {
     try {
         const article = await Article.findById(req.params.id);
         
