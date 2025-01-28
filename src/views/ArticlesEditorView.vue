@@ -43,10 +43,15 @@
             <label>Catégorie</label>
             <select v-model="article.category" class="form-control">
               <option value="">Sélectionner une catégorie</option>
-              <option value="security">Sécurité</option>
-              <option value="ai">Intelligence Artificielle</option>
-              <option value="development">Développement</option>
-              <option value="cloud">Cloud</option>
+              <option value="SÉCURITÉ">Sécurité</option>
+              <option value="DÉVELOPPEMENT">Développement</option>
+              <option value="ÉTHIQUE">Éthique</option>
+              <option value="IA">Intelligence Artificielle</option>
+              <option value="CLOUD">Cloud</option>
+              <option value="DONNÉES">Données</option>
+              <option value="API">API</option>
+              <option value="RÉGULATIONS">Régulations</option>
+              <option value="INNOVATION">Innovation</option>
             </select>
           </div>
 
@@ -223,28 +228,32 @@ const loadArticle = async () => {
 // Sauvegarde
 const saveArticle = async (publish = false) => {
   try {
-    saving.value = true
-    error.value = ''
+    saving.value = true;
+    error.value = '';
 
     const articleData = {
       ...article.value,
       published: publish
-    }
+    };
+
+    console.log('Données envoyées:', articleData); // Pour le débogage
 
     if (isNewArticle) {
-      await secureApi.createArticle(articleData)
+      await secureApi.createArticle(articleData);
     } else {
-      await secureApi.updateArticle(route.params.id, articleData)
+      await secureApi.updateArticle(route.params.id, articleData);
     }
 
-    router.push('/admin')
+    router.push('/admin');
   } catch (err) {
-    error.value = 'Erreur lors de la sauvegarde'
-    console.error(err)
+    console.error('Erreur complète:', err);
+    error.value = err.response?.data?.message || 
+                 (err.response?.data?.errors && err.response.data.errors.join(', ')) ||
+                 'Erreur lors de la sauvegarde';
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const saveAsDraft = () => saveArticle(false)
 const publishArticle = () => saveArticle(true)
