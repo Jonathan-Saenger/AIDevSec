@@ -1,30 +1,23 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  summary: {
-    type: String,
-    required: true,
-    maxLength: 200
-  },
-  author: {
-    type: String,
-    required: true,
-    default: 'Jonathan Saenger'
-  },
-  category: {
-    type: String,
-    required: true,
-    enum: [
-        'SÉCURITÉ', 
+    title: {
+        type: String,
+        required: [true, 'Le titre est requis'],
+        trim: true
+    },
+    content: {
+        type: String,
+        required: [true, 'Le contenu est requis']
+    },
+    summary: {
+        type: String,
+        required: [true, 'Le résumé est requis'],
+        trim: true
+    },
+    category: {
+        type: String,
+        enum: ['SÉCURITÉ', 
         'DÉVELOPPEMENT', 
         'ÉTHIQUE', 
         'IA', 
@@ -33,24 +26,26 @@ const articleSchema = new mongoose.Schema({
         'DONNÉES', 
         'API', 
         'RÉGULATIONS', 
-        'INNOVATION'
-      ]
-  },
-  tags: [{
-    type: String,
-    trim: true
-  }],
-  imageUrl: {
-    type: String,
-    default: null
-  },
-  published: {
-    type: Boolean,
-    default: false
-  }
+        'INNOVATION'],
+        required: [true, 'La catégorie est requise']
+    },
+    tags: [{
+        type: String,
+        trim: true
+    }],
+    published: {
+        type: Boolean,
+        default: false
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 }, {
-  timestamps: true
+    timestamps: true
 });
+
 //Méthode de résumé automatique
 articleSchema.pre('save', function(next) {
   if (!this.summary && this.content) {
@@ -61,6 +56,4 @@ articleSchema.pre('save', function(next) {
   next();
 });
 
-const Article = mongoose.model('Article', articleSchema);
-
-export default Article;
+module.exports = mongoose.model('Article', articleSchema);
