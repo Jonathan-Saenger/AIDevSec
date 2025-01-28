@@ -51,14 +51,14 @@ const handleLogin = async () => {
             password: password.value
         });
 
-        //Token
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Token
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
 
         // Fermer le formulaire
         isVisible.value = false;
 
-        //Redirection dashboard
+        // Redirection dashboard
         router.push('/admin');
     } catch (err) {
         error.value = err.response?.data?.message || 'Erreur de connexion';

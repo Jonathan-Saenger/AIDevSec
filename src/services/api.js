@@ -26,7 +26,9 @@ api.interceptors.request.use(
 
 // Intercepteur pour les réponses
 api.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        return response.data;
+    },
     async (error) => {
         if (error.response) {
             // Gestion des erreurs d'authentification
@@ -54,6 +56,7 @@ api.interceptors.response.use(
 export const secureApi = {
     // Articles
     getArticles: () => api.get('/api/articles'),
+    getArticle: (id) => api.get(`/api/articles/${id}`),
     createArticle: (data) => api.post('/api/articles', data),
     updateArticle: (id, data) => api.put(`/api/articles/${id}`, data),
     deleteArticle: (id) => api.delete(`/api/articles/${id}`),
