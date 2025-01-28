@@ -55,6 +55,9 @@ const handleLogin = async () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
 
+        // Fermer le formulaire
+        isVisible.value = false;
+
         //Redirection dashboard
         router.push('/admin');
     } catch (err) {
