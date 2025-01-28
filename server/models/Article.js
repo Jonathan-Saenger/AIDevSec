@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const articleSchema = new mongoose.Schema({
     title: {
@@ -21,8 +21,7 @@ const articleSchema = new mongoose.Schema({
         'DÉVELOPPEMENT', 
         'ÉTHIQUE', 
         'IA', 
-        'TUTORIEL', 
-        'CYBERSÉCURITÉ', 
+        'CLOUD', 
         'DONNÉES', 
         'API', 
         'RÉGULATIONS', 
@@ -49,11 +48,10 @@ const articleSchema = new mongoose.Schema({
 //Méthode de résumé automatique
 articleSchema.pre('save', function(next) {
   if (!this.summary && this.content) {
-    this.summary = this.content
-      .substring(0, 197)
-      .trim() + '...';
+    // Prendre les 200 premiers caractères comme résumé
+    this.summary = this.content.substring(0, 200) + '...';
   }
   next();
 });
 
-module.exports = mongoose.model('Article', articleSchema);
+export default mongoose.model('Article', articleSchema);
