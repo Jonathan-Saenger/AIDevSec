@@ -23,10 +23,10 @@
         :class="{ 'active': isMenuOpen }"
         @click="closeMenu"
       >
-        <a href="#" @click.prevent="scrollToSection('hero')" class="nav-link">Accueil</a>
-        <a href="#articles" @click.prevent="scrollToSection('latest-articles')" class="nav-link">Articles</a>
-        <a href="#presentation" @click.prevent="scrollToSection('presentation')" class="nav-link">Présentation</a>
-        <a href="#contact" @click.prevent="scrollToSection('contact')" class="nav-link">Contact</a>
+        <a href="#" @click.prevent="navigateToSection('hero')" class="nav-link">Accueil</a>
+        <a href="#articles" @click.prevent="navigateToSection('latest-articles')" class="nav-link">Articles</a>
+        <a href="#presentation" @click.prevent="navigateToSection('presentation')" class="nav-link">Présentation</a>
+        <a href="#contact" @click.prevent="navigateToSection('contact')" class="nav-link">Contact</a>
       </div>
     </div>
   </nav>
@@ -34,7 +34,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const isMenuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -45,22 +47,25 @@ const closeMenu = () => {
   isMenuOpen.value = false;
 };
 
-const scrollToSection = (sectionId) => {
-  try {
-    const element = document.getElementById(sectionId);
-    if (!element) return;
-
-    const navbar = document.querySelector('.navbar');
-    const offset = navbar ? navbar.offsetHeight : 0;
-
+const navigateToSection = async (sectionId) => {
+  closeMenu();
+  
+  // Si nous ne sommes pas sur la page d'accueil, naviguer d'abord vers celle-ci
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/');
+    // Attendre un court instant pour que la page se charge
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
+  // Faire défiler jusqu'à la section
+  const element = document.getElementById(sectionId);
+  if (element) {
+    const navbarHeight = 70; 
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
-      top: element.offsetTop - offset,
+      top: elementPosition - navbarHeight,
       behavior: 'smooth'
     });
-
-    closeMenu();
-  } catch (e) {
-    console.error('Scroll error:', e);
   }
 };
 

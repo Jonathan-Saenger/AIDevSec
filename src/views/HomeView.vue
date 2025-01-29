@@ -12,12 +12,15 @@
 
     <section class="latest-articles" id="latest-articles">
       <h2 class="section-title neon-text">Derniers Articles</h2>
-      <div class="articles-grid">
-        <article v-for="i in 3" :key="i" class="article-card">
-          <div class="article-badge">IA & SÉCURITÉ</div>
-          <h3>Article Title {{ i }}</h3>
-          <p>Description de l'article avec un aperçu du contenu...</p>
-          <router-link :to="'/article/' + i" class="read-more">Lire plus</router-link>
+      <div v-if="loading" class="loading">
+        Chargement des articles...
+      </div>
+      <div v-else class="articles-grid">
+        <article v-for="article in latestArticles" :key="article._id" class="article-card">
+          <div class="article-badge">{{ article.category }}</div>
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.summary }}</p>
+          <router-link :to="'/blog/' + article._id" class="read-more">Lire plus</router-link>
         </article>
       </div>
       <div class="view-all-articles">
@@ -516,4 +519,7 @@ onMounted(() => {
   scroll-snap-align: start;
 }
 
+section {
+  scroll-margin-top: 80px; 
+}
 </style>
