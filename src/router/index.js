@@ -43,6 +43,11 @@ const router = createRouter({
       name: 'article-edit',
       component: () => import('../views/ArticlesEditorView.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: () => import('../views/BlogView.vue')
     }
   ],
   // Comportement de défilement personnalisé

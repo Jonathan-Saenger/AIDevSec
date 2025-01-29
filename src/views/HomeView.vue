@@ -20,6 +20,12 @@
           <router-link :to="'/article/' + i" class="read-more">Lire plus</router-link>
         </article>
       </div>
+      <div class="view-all-articles">
+        <router-link to="/blog" class="view-all-link">
+          <span>Consulter tous les articles dans le Blog</span>
+          <i class="fas fa-arrow-right"></i>
+        </router-link>
+      </div>
     </section>
 
     <section class="presentation" id="presentation">
@@ -58,31 +64,57 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        email: '',
-        message: '',
-      },
-      loading: false,
-    };
-  },
-  methods: {
-    async submitForm() {
-      this.loading = true;
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log('Formulaire soumis :', this.form);
-      this.form.name = '';
-      this.form.email = '';
-      this.form.message = '';
-      this.loading = false;
-      alert('Message envoyé avec succès !');
-    },
-  },
+<script setup>
+import { ref, onMounted } from 'vue';
+import { secureApi } from '../services/api';
+
+// État pour les articles
+const latestArticles = ref([]);
+const loading = ref(false);
+
+// État pour le formulaire de contact
+const form = ref({
+    name: '',
+    email: '',
+    message: '',
+});
+
+// Récupérer les 3 derniers articles publiés
+const fetchLatestArticles = async () => {
+  try {
+    loading.value = true;
+    const articles = await secureApi.getArticles();
+    latestArticles.value = articles
+      .filter(article => article.published)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 3);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des articles:', error);
+  } finally {
+    loading.value = false;
+  }
 };
+
+// Soumission du formulaire de contact
+const submitForm = async () => {
+  try {
+    loading.value = true;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log('Formulaire soumis :', form.value);
+    this.value.name = '';
+    this.value.email = '';
+    this.value.message = '';
+  } catch (error) {
+    console.error('Erreur lors de la soumission du formulaire:', error);
+  } finally {
+    loading.value = false;
+    alert('Message envoyé avec succès !');
+  }
+};
+
+onMounted(() => {
+  fetchLatestArticles();
+});
 </script>
 
 <style scoped>
@@ -299,6 +331,35 @@ export default {
 
 .read-more:hover {
   text-shadow: 0 0 8px rgba(var(--neon-circuit-rgb), 0.4);
+}
+
+.view-all-articles {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #2c3e50, #3498db);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+.view-all-link:hover {
+  transform: translateY(-2px);
+}
+
+.view-all-link i {
+  transition: transform 0.2s;
+}
+
+.view-all-link:hover i {
+  transform: translateX(4px);
 }
 
 @media (max-width: 768px) {
