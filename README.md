@@ -54,7 +54,7 @@ Une plateforme moderne dédiée au partage de connaissances sur la sécurité du
 
 1. Cloner le repository
 ```bash
-git clone [URL_DU_REPO]
+git clone https://github.com/Jonathan-Saenger/AIDevSec.git
 cd aidevsec
 ```
 
@@ -120,7 +120,3 @@ aidevsec/
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
-
-## 📝 License
-
-[MIT License](LICENSE)
