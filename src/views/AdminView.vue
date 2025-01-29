@@ -135,10 +135,10 @@ const fetchArticles = async () => {
   try {
     loading.value = true;
     const response = await secureApi.getArticles();
-    articles.value = response.data;
+    articles.value = response; 
   } catch (err) {
     error.value = 'Erreur lors du chargement des articles';
-    console.error(err);
+    console.error('Erreur complète:', err);
   } finally {
     loading.value = false;
   }
