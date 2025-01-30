@@ -173,4 +173,48 @@ button:disabled {
 .close-button:hover {
   color: #fff;
 }
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1.5rem;
+    width: 95%;
+    max-width: 100%;
+    margin: 0 10px;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  input {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .close-button {
+    font-size: 20px;
+    top: 8px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-container {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+
+  input {
+    padding: 0.5rem;
+  }
+}
 </style>
