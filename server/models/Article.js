@@ -15,6 +15,11 @@ const articleSchema = new mongoose.Schema({
         required: [true, 'Le résumé est requis'],
         trim: true
     },
+    image: {
+        type: String,
+        trim: true,
+        default: null
+    },
     category: {
         type: String,
         enum: ['SÉCURITÉ', 

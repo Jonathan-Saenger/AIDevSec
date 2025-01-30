@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import articleRoutes from './routes/articleRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 // Configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -27,6 +29,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', articleRoutes);
+app.use('/api', uploadRoutes);
 
 // Route de test
 app.get('/api/test', (req, res) => {

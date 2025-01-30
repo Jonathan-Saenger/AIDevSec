@@ -48,15 +48,23 @@ const router = createRouter({
       path: '/blog',
       name: 'blog',
       component: () => import('../views/BlogView.vue')
+    },
+    {
+      path: '/blog/:id',
+      name: 'article-detail',
+      component: () => import('../views/ArticleDetailView.vue')
     }
   ],
+  
   // Comportement de défilement personnalisé
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
-    } else {
-      return { top: 0 }
     }
+    if (to.hash) {
+      return { el: to.hash }
+    }
+    return { top: 0 }
   }
 })
 

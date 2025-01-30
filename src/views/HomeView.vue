@@ -17,10 +17,15 @@
       </div>
       <div v-else class="articles-grid">
         <article v-for="article in latestArticles" :key="article._id" class="article-card">
-          <div class="article-badge">{{ article.category }}</div>
-          <h3>{{ article.title }}</h3>
-          <p>{{ article.summary }}</p>
-          <router-link :to="'/blog/' + article._id" class="read-more">Lire plus</router-link>
+          <div class="article-image" v-if="article.image">
+            <img :src="article.image" :alt="article.title">
+          </div>
+          <div class="article-content">
+            <div class="article-badge">{{ article.category }}</div>
+            <h3>{{ article.title }}</h3>
+            <p>{{ article.summary }}</p>
+            <router-link :to="'/blog/' + article._id" class="read-more">Lire plus</router-link>
+          </div>
         </article>
       </div>
       <div class="view-all-articles">
@@ -279,61 +284,87 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-top: 2rem;
 }
 
 .article-card {
-  background: var(--carbon);
-  padding: 1.5rem;
-  border-radius: 8px;
-  position: relative;
-  transition: transform 0.3s ease;
+  background: rgba(26, 26, 26, 0.8);
+  border-radius: 12px;
   overflow: hidden;
-}
-
-.article-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(var(--neon-circuit-rgb), 0.1) 0%,
-    transparent 50%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 158, 255, 0.1);
 }
 
 .article-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(74, 158, 255, 0.15);
 }
 
-.article-card:hover::before {
-  opacity: 1;
+.article-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.article-card:hover .article-image img {
+  transform: scale(1.05);
+}
+
+.article-content {
+  padding: 1.5rem;
 }
 
 .article-badge {
-  background: rgba(var(--hologram-green-rgb), 0.9);
-  color: var(--cyber-void);
-  display: inline-block;
-  padding: 0.25rem 1rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(74, 158, 255, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(5px);
+  z-index: 1;
+}
+
+.article-card h3 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.article-card p {
+  color: #ccc;
+  margin: 1rem 0;
+  line-height: 1.6;
 }
 
 .read-more {
-  color: var(--neon-circuit);
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #4a9eff;
+  color: white;
   text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s, transform 0.2s;
   font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
 }
 
 .read-more:hover {
-  text-shadow: 0 0 8px rgba(var(--neon-circuit-rgb), 0.4);
+  background: #3182ce;
+  transform: translateX(5px);
 }
 
 .view-all-articles {
@@ -376,6 +407,14 @@ onMounted(() => {
 
   .section-title {
     font-size: 2rem;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .article-card {
+    margin: 0 1rem;
   }
 }
 

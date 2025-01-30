@@ -31,7 +31,7 @@ export const getArticleById = async (req, res) => {
 // Créer un nouvel article
 export const createArticle = async (req, res) => {
     try {
-        const { title, content, summary, category, tags, published } = req.body;
+        const { title, content, summary, category, tags, published, image } = req.body;
         
         const article = new Article({
             title,
@@ -40,7 +40,8 @@ export const createArticle = async (req, res) => {
             category,
             tags,
             published,
-            author: req.user._id // Ajouté par le middleware d'authentification
+            image,
+            author: req.user._id
         });
         
         const savedArticle = await article.save();
@@ -59,7 +60,7 @@ export const createArticle = async (req, res) => {
 // Mettre à jour un article
 export const updateArticle = async (req, res) => {
     try {
-        const { title, content, summary, category, tags, published } = req.body;
+        const { title, content, summary, category, tags, published, image } = req.body;
         
         const article = await Article.findById(req.params.id);
         
@@ -72,19 +73,15 @@ export const updateArticle = async (req, res) => {
             return res.status(403).json({ message: 'Non autorisé à modifier cet article' });
         }
         
-        const updatedArticle = await Article.findByIdAndUpdate(
-            req.params.id,
-            {
-                title,
-                content,
-                summary,
-                category,
-                tags,
-                published
-            },
-            { new: true, runValidators: true }
-        ).populate('author', 'username');
+        article.title = title || article.title;
+        article.content = content || article.content;
+        article.summary = summary || article.summary;
+        article.category = category || article.category;
+        article.tags = tags || article.tags;
+        article.published = published !== undefined ? published : article.published;
+        article.image = image !== undefined ? image : article.image;
         
+        const updatedArticle = await article.save();
         res.json(updatedArticle);
     } catch (error) {
         if (error.name === 'ValidationError') {

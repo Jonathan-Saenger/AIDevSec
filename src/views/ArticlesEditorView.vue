@@ -2,7 +2,13 @@
 <template>
   <div class="article-editor">
     <header class="editor-header">
-      <h1>{{ isNewArticle ? 'Nouvel Article' : 'Modifier l\'Article' }}</h1>
+      <div class="header-left">
+        <router-link to="/blog" class="btn-back">
+          <i class="fas fa-arrow-left"></i>
+          Retour au blog
+        </router-link>
+        <h1>{{ isNewArticle ? 'Nouvel Article' : 'Modifier l\'Article' }}</h1>
+      </div>
       <div class="editor-actions">
         <button @click="saveAsDraft" class="btn-draft" :disabled="saving">
           <i class="fas fa-save"></i> 
@@ -18,6 +24,31 @@
     <div class="editor-main">
       <!-- Métadonnées -->
       <div class="metadata-section">
+        <!-- Image de couverture -->
+        <div class="form-group">
+          <label>Image de couverture</label>
+          <div class="cover-image-upload">
+            <div 
+              class="image-preview" 
+              :class="{ 'has-image': article.image }"
+              :style="article.image ? { backgroundImage: `url(${article.image})` } : {}"
+            >
+              <input
+                type="file"
+                accept="image/*"
+                @change="handleImageUpload"
+                data-type="cover"
+                class="file-input"
+              >
+              <div class="upload-overlay">
+                <i class="fas fa-camera"></i>
+                <span>{{ article.image ? 'Changer l\'image' : 'Ajouter une image de couverture' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autres champs de métadonnées -->
         <div class="form-group">
           <label>Titre</label>
           <input 
@@ -78,45 +109,53 @@
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- Éditeur de contenu -->
       <div class="content-editor">
         <div class="editor-toolbar">
-          <button
-            v-for="item in editorButtons"
-            :key="item.command"
-            @click="item.action"
-            :class="{ active: item.isActive?.() }"
-            class="toolbar-button"
-            :title="item.label"
-          >
-            <i :class="item.icon"></i>
-          </button>
+          <div class="toolbar-group text-style">
+            <button
+              v-for="button in editorButtons"
+              :key="button.command"
+              class="toolbar-button"
+              :class="{ 'is-active': button.isActive() }"
+              @click="button.action()"
+              :title="button.label"
+              v-show="!(button.command === 'image')"
+            >
+              <i :class="button.icon" aria-hidden="true"></i>
+              <span class="button-label">{{ button.label }}</span>
+            </button>
+          </div>
         </div>
 
         <editor-content :editor="editor" class="editor-content" />
       </div>
     </div>
 
-    <div v-if="error" class="error-message">
-      {{ error }}
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
+import axios from 'axios'
 import { secureApi } from '../services/api'
 
 const router = useRouter()
 const route = useRoute()
 const isNewArticle = route.name === 'article-new'
+const saving = ref(false)
+const errorMessage = ref('')
 
 // État de l'article
 const article = ref({
@@ -125,12 +164,11 @@ const article = ref({
   summary: '',
   category: '',
   tags: [],
-  published: false
+  published: false,
+  image: null
 })
 
 const tagInput = ref('')
-const error = ref('')
-const saving = ref(false)
 
 // Configuration de l'éditeur
 const editor = new Editor({
@@ -144,6 +182,94 @@ const editor = new Editor({
     article.value.content = editor.getHTML()
   }
 })
+
+// Fonction pour gérer l'upload d'image
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await axios.post('/api/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    if (response.data && response.data.url) {
+      if (event.target.dataset.type === 'cover') {
+        article.value = {
+          ...article.value,
+          image: response.data.url
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'upload de l\'image:', error)
+    errorMessage.value = 'Erreur lors de l\'upload de l\'image'
+  }
+}
+
+// Chargement de l'article existant
+const loadArticle = async () => {
+  if (!isNewArticle) {
+    try {
+      const response = await secureApi.getArticle(route.params.id)
+      if (response) {
+        article.value = {
+          ...response,
+          tags: response.tags || []
+        }
+        editor.commands.setContent(response.content || '')
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement de l\'article:', error)
+      errorMessage.value = 'Erreur lors du chargement de l\'article'
+      router.push('/articles')
+    }
+  }
+}
+
+// Sauvegarde de l'article
+const saveArticle = async (publish = false) => {
+  try {
+    saving.value = true
+    errorMessage.value = ''
+    
+    const articleData = {
+      ...article.value,
+      published: publish
+    }
+
+    let response
+    if (isNewArticle) {
+      response = await secureApi.createArticle(articleData)
+    } else {
+      response = await secureApi.updateArticle(article.value._id, articleData)
+    }
+    
+    if (response) {
+      if (isNewArticle) {
+        router.push(`/articles/${response._id}`)
+      } else {
+        article.value = {
+          ...response,
+          tags: response.tags || []
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde:', error)
+    errorMessage.value = 'Erreur lors de la sauvegarde de l\'article'
+  } finally {
+    saving.value = false
+  }
+}
+
+const saveAsDraft = () => saveArticle(false)
+const publishArticle = () => saveArticle(true)
 
 // Boutons de la barre d'outils
 const editorButtons = [
@@ -211,60 +337,9 @@ const removeTag = (tagToRemove) => {
   article.value.tags = article.value.tags.filter(tag => tag !== tagToRemove)
 }
 
-// Chargement de l'article existant
-const loadArticle = async () => {
-  if (!isNewArticle) {
-    try {
-      const response = await secureApi.getArticle(route.params.id)
-      article.value = response.data
-      editor.commands.setContent(article.value.content)
-    } catch (err) {
-      error.value = 'Erreur lors du chargement de l\'article'
-      console.error(err)
-    }
-  }
-}
-
-// Sauvegarde
-const saveArticle = async (publish = false) => {
-  try {
-    saving.value = true;
-    error.value = '';
-
-    const articleData = {
-      ...article.value,
-      published: publish
-    };
-
-    console.log('Données envoyées:', articleData); // Pour le débogage
-
-    if (isNewArticle) {
-      await secureApi.createArticle(articleData);
-    } else {
-      await secureApi.updateArticle(route.params.id, articleData);
-    }
-
-    router.push('/admin');
-  } catch (err) {
-    console.error('Erreur complète:', err);
-    error.value = err.response?.data?.message || 
-                 (err.response?.data?.errors && err.response.data.errors.join(', ')) ||
-                 'Erreur lors de la sauvegarde';
-  } finally {
-    saving.value = false;
-  }
-};
-
-const saveAsDraft = () => saveArticle(false)
-const publishArticle = () => saveArticle(true)
-
 // Cycle de vie
 onMounted(() => {
   loadArticle()
-})
-
-onBeforeUnmount(() => {
-  editor.destroy()
 })
 </script>
 
@@ -280,6 +355,12 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 .editor-actions {
@@ -361,30 +442,70 @@ onBeforeUnmount(() => {
 .editor-toolbar {
   display: flex;
   gap: 0.5rem;
-  padding: 0.5rem;
-  background: #2a2a2a;
-  border-radius: 4px;
+  padding: 1rem;
+  background: #2d3748;
+  border-radius: 6px;
   margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #4a5568;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 0.5rem;
+  padding-right: 1rem;
+  border-right: 1px solid #4a5568;
+}
+
+.toolbar-group:last-child {
+  border-right: none;
 }
 
 .toolbar-button {
-  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: #3a4556;
   border: none;
-  background: none;
-  color: #999;
-  cursor: pointer;
   border-radius: 4px;
-  transition: all 0.2s;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 40px;
+}
+
+.toolbar-button i {
+  font-size: 1.1rem;
+}
+
+.toolbar-button .button-label {
+  font-size: 0.9rem;
+  display: inline-block;
 }
 
 .toolbar-button:hover {
-  background: #333;
-  color: #fff;
+  background: #4a5568;
+  transform: translateY(-1px);
 }
 
-.toolbar-button.active {
-  background: #4a9eff;
+.toolbar-button.is-active {
+  background: #4299e1;
   color: white;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .editor-content {
@@ -394,31 +515,118 @@ onBeforeUnmount(() => {
   min-height: 300px;
 }
 
+.editor-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cover-image-upload {
+  margin-bottom: 1rem;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.image-preview.has-image .upload-overlay {
+  opacity: 0;
+}
+
+.image-preview:hover .upload-overlay {
+  opacity: 1;
+}
+
+.file-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: opacity 0.3s;
+}
+
+.upload-overlay i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
 /* Styles pour le contenu de l'éditeur */
 :deep(.ProseMirror) {
   min-height: 300px;
   color: #fff;
+  padding: 1rem;
 }
 
 :deep(.ProseMirror p) {
   margin: 1em 0;
+  line-height: 1.6;
 }
 
 :deep(.ProseMirror h1) {
   font-size: 2em;
   margin: 1em 0;
+  color: #4a9eff;
+}
+
+:deep(.ProseMirror h2) {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+  color: #4a9eff;
+}
+
+:deep(.ProseMirror h3) {
+  font-size: 1.17em;
+  margin: 1em 0;
+  color: #4a9eff;
 }
 
 :deep(.ProseMirror blockquote) {
   border-left: 3px solid #4a9eff;
   padding-left: 1em;
   margin: 1em 0;
+  font-style: italic;
+  color: #a0aec0;
 }
 
 :deep(.ProseMirror pre) {
   background: #333;
   padding: 1em;
   border-radius: 4px;
+  overflow-x: auto;
+}
+
+:deep(.ProseMirror code) {
+  background: #333;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
 }
 
 .btn-draft, .btn-publish {
@@ -456,6 +664,31 @@ onBeforeUnmount(() => {
   color: #ff4a4a;
   margin-top: 1rem;
   text-align: center;
+  padding: 0.5rem;
+  background: rgba(255, 74, 74, 0.1);
+  border-radius: 4px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4a9eff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  background: rgba(74, 158, 255, 0.1);
+}
+
+.btn-back:hover {
+  background: rgba(74, 158, 255, 0.2);
+  transform: translateX(-5px);
+}
+
+.btn-back i {
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {
@@ -467,6 +700,25 @@ onBeforeUnmount(() => {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+  
+  .editor-actions {
+    justify-content: center;
+  }
+  
+  .toolbar-button .button-label {
+    display: none;
+  }
+  
+  .header-left {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .btn-back {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>
