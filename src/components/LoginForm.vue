@@ -119,7 +119,7 @@ h2 {
 }
 
 input {
-  width: 100%;
+  width: 90%;
   padding: 0.8rem;
   border: 1px solid #333;
   border-radius: 4px;
@@ -134,7 +134,7 @@ input:focus {
 }
 
 button {
-  width: 100%;
+  width: 50%;
   padding: 0.8rem;
   background: #4a9eff;
   color: white;
