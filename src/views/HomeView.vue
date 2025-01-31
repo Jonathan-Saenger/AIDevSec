@@ -427,7 +427,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 3rem var(--container-padding);
+  padding: 0.5rem var(--container-padding);
   max-width: 700px;
   margin: 0 auto;
   position: relative;
@@ -440,7 +440,7 @@ onMounted(() => {
   gap: 1.5rem;
   width: 100%;
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 2.5rem;
   background: rgba(20, 25, 35, 0.5);
   border: 1px solid rgba(74, 158, 255, 0.1);
