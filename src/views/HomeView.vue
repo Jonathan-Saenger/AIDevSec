@@ -138,18 +138,128 @@ onMounted(() => {
 <style scoped>
 .home {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
-.hero {
+.home section {
+  width: 100%;
   position: relative;
-  height: 80vh;
+  margin: 2rem 0;
+  background: linear-gradient(to bottom, rgba(16, 16, 24, 0.95), rgba(16, 16, 24, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.contact {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 100%;
+  padding: 1.5rem var(--container-padding);
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem auto;
+  padding: 1.75rem 2rem;
+  background: rgba(20, 25, 35, 0.5);
+  border: 1px solid rgba(74, 158, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.form-group label {
+  font-family: var(--font-heading);
+  color: rgba(74, 158, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(16, 16, 24, 0.6);
+  border: 1px solid rgba(74, 158, 255, 0.2);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: rgba(74, 158, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.1);
+  background: rgba(16, 16, 24, 0.8);
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: rgba(74, 158, 255, 0.3);
+}
+
+.terminal-btn {
+  background: rgba(74, 158, 255, 0.1);
+  color: rgba(74, 158, 255, 0.9);
+  border: 1px solid rgba(74, 158, 255, 0.3);
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  width: 200px;
+  margin: 1rem auto 0;
+  position: relative;
   overflow: hidden;
 }
 
-/* TEMPLATE D'ACCUEIL */
+.terminal-btn:hover {
+  background: rgba(74, 158, 255, 0.2);
+  border-color: rgba(74, 158, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
+}
+
+.terminal-btn:active {
+  transform: translateY(0);
+}
+
+.terminal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .cyber-background {
   position: absolute;
   top: 0;
@@ -225,7 +335,6 @@ onMounted(() => {
   100% { transform: translateY(50%); }
 }
 
-/* Effets de particules discrètes */
 .cyber-particles {
   position: absolute;
   inset: 0;
@@ -251,6 +360,15 @@ onMounted(() => {
 @keyframes grid-pulse {
   0% { background-position: 0 0; }
   100% { background-position: 240px 240px; }
+}
+
+.hero {
+  position: relative;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .hero-content {
@@ -428,7 +546,6 @@ onMounted(() => {
   }
 }
 
-/* TEMPLATE DE PRESENTATION */
 .presentation {
   padding: 2rem var(--container-padding);
   max-width: 1440px;
@@ -497,116 +614,6 @@ onMounted(() => {
   }
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .presentation-content {
-    flex-direction: column;
-  }
-
-  .image-content {
-    order: 2; /* Image au milieu en mobile */
-  }
-
-  .text-content {
-    order: 3; /* Texte en bas en mobile */
-    text-align: center;
-    padding-right: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .presentation h2 {
-    order: 1; /* Titre en haut en mobile */
-  }
-}
-
-/* TEMPLATE DE CONTACT */
-.contact {
-  padding: 1rem var(--container-padding);
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-family: var(--font-heading);
-  color: var(--neon-circuit);
-  font-size: 1.1rem;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 0.75rem;
-  border: 2px solid var(--neon-circuit);
-  background: transparent;
-  color: var(--neon-circuit);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: var(--quantum-pink);
-  outline: none;
-}
-
-.terminal-btn {
-  background: transparent;
-  color: var(--neon-circuit);
-  border: 2px solid var(--neon-circuit);
-  padding: 0.75rem 2rem;
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border-radius: 4px;
-  margin-top: 1rem;
-  width: 50%; 
-  max-width: 200px; 
-  margin-left: auto; 
-  margin-right: auto; 
-}
-
-.terminal-btn:hover {
-  background: rgba(0, 243, 255, 0.1);
-  text-shadow: 0 0 5px var(--neon-circuit);
-  transform: scale(1.05);
-}
-
-@media (max-width: 768px) {
-  .contact {
-    padding: 2rem var(--container-padding);
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 0.9rem;
-  }
-
-  .terminal-btn {
-    width: 60%; 
-    max-width: 150px; 
-    font-size: 0.9rem;
-    padding: 0.5rem 1.5rem;
-  }
-}
-
 .scroll-section {
   scroll-snap-align: start;
 }
@@ -647,6 +654,23 @@ section {
   .section-intro::before {
     width: 40px;
     bottom: -1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 1rem var(--container-padding);
+  }
+
+  .contact-form {
+    padding: 1.25rem;
+    margin: 0.75rem;
+  }
+
+  .terminal-btn {
+    width: 100%;
+    max-width: none;
+    margin-top: 0.75rem;
   }
 }
 </style>
