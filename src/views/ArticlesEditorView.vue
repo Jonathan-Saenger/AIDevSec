@@ -7,6 +7,10 @@
           <i class="fas fa-arrow-left"></i>
           Retour au blog
         </router-link>
+        <router-link to="/admin" class="btn-back">
+          <i class="fas fa-arrow-left"></i>
+          Retour au dashboard
+        </router-link>
         <h1>{{ isNewArticle ? 'Nouvel Article' : 'Modifier l\'Article' }}</h1>
       </div>
       <div class="editor-actions">
