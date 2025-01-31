@@ -8,15 +8,16 @@
       
       <div class="footer-section">
         <h3>Contact</h3>
-        <p>contact@aidevsec.com</p>
+        <p>jonathan.saenger.pro@gmail.com</p>
       </div>
 
       <div class="footer-section">
-        <h3>Suivez-moi</h3>
+        <h3>Rejoingnez-moi</h3>
         <div class="social-links">
-          <a href="#" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="#" target="_blank" rel="noopener">GitHub</a>
-          <a href="#" target="_blank" rel="noopener">Twitter</a>
+          <a href="https://www.linkedin.com/in/jonathansaenger/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Jonathan-Saenger" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://x.com/SaengerPro" target="_blank" rel="noopener">X</a>
+          <a href="https://codepen.io/Jonathan-Saenger" target="_blank" rel="noopener">CodePen</a>
         </div>
       </div>
     </div>
