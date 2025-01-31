@@ -49,7 +49,6 @@ const showLoginForm = () => {
   background-color: #1a1a1a;
   color: #fff;
   padding: 3rem 2rem 1rem;
-  margin-top: 4rem;
 }
 
 .footer-content {
