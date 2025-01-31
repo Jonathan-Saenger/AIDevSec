@@ -7,7 +7,7 @@
     <header class="blog-header">
       <div class="header-content">
         <h1>Blog<span class="title-accent">.</span></h1>
-        <p class="subtitle">Explorez nos articles sur la cybersécurité et l'IA</p>
+        <p class="subtitle">Retrouvez toute l'actualité sur l'IA, la cybersécurité et les bonnes pratique de développement.</p>
         <button @click="toggleFilters" class="toggle-filters" :class="{ active: showFilters }">
           <i class="fas fa-sliders-h"></i>
           Filtres

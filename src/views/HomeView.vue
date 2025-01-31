@@ -12,6 +12,9 @@
 
     <section class="latest-articles" id="latest-articles">
       <h2 class="section-title neon-text">Derniers Articles</h2>
+      <p class="section-intro"> Parce que la technologie évolue sans cesse et très rapidement, les articles sont régulièrement 
+          mis à jour plutôt que recréés systématiquement. Restez informé, anticipez les défis et façonnez l'avenir du web 
+          en toute sécurité avec l'intelligence artificielle.</p>
       <div v-if="loading" class="loading">
         Chargement des articles...
       </div>
@@ -37,14 +40,21 @@
     </section>
 
     <section class="presentation" id="presentation">
-      <h2 class="section-title neon-text">Présentation</h2>
+      <h2 class="section-title neon-text">Développeur à l’ère de l’IA : S’adapter, Innover, Sécuriser</h2>
       <div class="presentation-content">
         <div class="text-content">
-          <h3>Ce qui je suis avant tout : un passionné ...</h3>
-          <p>...de Développement Web, des nouvelles tendances de l'intelligence artificielle et des solutions à la sécurité. Contenu de ma présentation</p>
+          <h3>L’intelligence artificielle révolutionne le développement web. Loin d’être une menace, elle offre aux développeurs une opportunité unique 
+            d’optimiser leur code, d’accélérer le processus de création et d'offrir aux professionnels de nouveaux outils pour répondre aux mutations de leur marché. 
+            Mais ces avancées soulèvent aussi un défi majeur : la cybersécurité.</h3>
+          <p>Je suis Jonathan Saenger, développeur web passionné par l'évolution technologique. Je suis heureux de vous partager de nouvelles pratiques de développement à l'ère de l'intelligence artificielle. 
+            Développeur web fullstack, j'étudie actuellement le Cloud Computing et me forme sur l'Intelligence Artificielle. Tout cela me permet d'explorer comment notre façon
+            de travailler est en pleine transformation avec la sécurité, plus que jamais, placé au coeur de notre priorité.<br><br>
+            À travers ce blog, je partage ma vision d'un développement web moderne où l'IA devient un allié puissant pour doper notre apprentissage, optimiser nos processus de développement 
+            et stimuler notre créativité. Que vous soyez un professionnel et/ou passionné de tech, j'essaierais de vous partager autant de
+            ressources utiles pour naviguer dans cette ère numérique en pleine transformation.</p>
         </div>
         <div class="image-content">
-          <img src="https://via.placeholder.com/400x200" alt="Image de présentation">
+          <img src="/portrait.png" alt="Portrait de Jonathan Saenger" class="portrait-image">
         </div>
       </div>
     </section>
@@ -276,7 +286,7 @@ onMounted(() => {
 
 .section-title {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   font-size: 2.5rem;
 }
 
@@ -428,20 +438,63 @@ onMounted(() => {
 }
 
 .presentation-content {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .text-content {
   flex: 1;
 }
 
-.image-content img {
-  max-width: 100%;
+.image-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.portrait-image {
+  width: 400px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(74, 158, 255, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.portrait-image:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 1200px) {
+  .portrait-image {
+    width: 350px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .presentation-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .portrait-image {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .presentation-content {
+    padding: 0 1rem;
+  }
+
+  .portrait-image {
+    width: 250px;
+  }
 }
 
 /* Responsive Design */
@@ -560,5 +613,40 @@ onMounted(() => {
 
 section {
   scroll-margin-top: 80px; 
+}
+
+.section-intro {
+  max-width: 950px;
+  margin: 0 auto 3rem;
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+.section-intro::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1.5rem;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+}
+
+@media (max-width: 768px) {
+  .section-intro {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+
+  .section-intro::before {
+    width: 40px;
+    bottom: -1rem;
+  }
 }
 </style>
