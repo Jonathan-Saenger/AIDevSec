@@ -427,7 +427,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 1.5rem var(--container-padding);
+  padding: 3rem var(--container-padding);
   max-width: 700px;
   margin: 0 auto;
   position: relative;
@@ -437,14 +437,14 @@ onMounted(() => {
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
   max-width: 600px;
-  margin: 1rem auto;
-  padding: 1.75rem 2rem;
+  margin: 2rem auto;
+  padding: 2.5rem;
   background: rgba(20, 25, 35, 0.5);
   border: 1px solid rgba(74, 158, 255, 0.1);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
@@ -452,33 +452,32 @@ onMounted(() => {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   width: 100%;
 }
 
 .form-group label {
   font-family: var(--font-heading);
   color: rgba(74, 158, 255, 0.9);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
   background: rgba(16, 16, 24, 0.6);
   border: 1px solid rgba(74, 158, 255, 0.2);
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  border-radius: 6px;
+  font-size: 1rem;
+  border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .form-group textarea {
-  min-height: 100px;
+  min-height: 150px;
   resize: vertical;
 }
 
@@ -494,14 +493,15 @@ onMounted(() => {
   background: rgba(74, 158, 255, 0.1);
   color: rgba(74, 158, 255, 0.9);
   border: 1px solid rgba(74, 158, 255, 0.3);
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.3s ease;
-  width: 200px;
+  width: 100%;
+  max-width: 250px;
   margin: 1rem auto 0;
 }
 
@@ -515,6 +515,92 @@ onMounted(() => {
 .terminal-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .contact {
+    padding: 2.5rem 2rem;
+  }
+
+  .contact-form {
+    padding: 2rem;
+    margin: 1.5rem auto;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 2rem 1.5rem;
+  }
+
+  .contact-form {
+    padding: 1.75rem;
+    margin: 1rem auto;
+    gap: 1.25rem;
+    border-radius: 10px;
+    width: 90%;
+  }
+
+  .form-group {
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.875rem 1rem;
+    font-size: 16px;
+    border-radius: 6px;
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .form-group textarea {
+    min-height: 120px;
+  }
+
+  .terminal-btn {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.95rem;
+    width: 90%;
+    margin: 1rem auto 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-form {
+    padding: 1.25rem;
+    gap: 1rem;
+    width: 85%;
+  }
+
+  .form-group {
+    padding: 0 0.75rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem 0.875rem;
+    width: 80%;
+  }
+
+  .form-group textarea {
+    min-height: 100px;
+  }
+
+  .terminal-btn {
+    padding: 0.75rem 1.5rem;
+    width: 85%;
+  }
 }
 
 /* Common Section Styles */
@@ -624,12 +710,6 @@ onMounted(() => {
   .contact-form {
     padding: 1.25rem;
     margin: 0.75rem;
-  }
-
-  .terminal-btn {
-    width: 100%;
-    max-width: none;
-    margin-top: 0.75rem;
   }
 
   .section-intro {
