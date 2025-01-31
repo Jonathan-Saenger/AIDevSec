@@ -3,11 +3,11 @@
     <header class="admin-header">
       <h1>Dashboard Administrateur</h1>
       <div class="admin-actions">
-        <button @click="createNewArticle" class="action-button primary">
-          <i class="fas fa-plus"></i> Nouvel Article
+        <button @click="createNewArticle" class="action-button primary" title="Nouvel Article">
+          <i class="fas fa-plus"></i>
         </button>
-        <button @click="logout" class="action-button danger">
-          <i class="fas fa-sign-out-alt"></i> Déconnexion
+        <button @click="logout" class="action-button danger" title="Déconnexion">
+          <i class="fas fa-sign-out-alt"></i>
         </button>
       </div>
     </header>
@@ -76,15 +76,14 @@
           </div>
 
           <div class="article-actions">
-            <button @click="editArticle(article._id)" class="btn-edit">
-              <i class="fas fa-edit"></i> Modifier
+            <button @click="editArticle(article._id)" class="action-button" title="Modifier">
+              <i class="fas fa-edit"></i>
             </button>
-            <button @click="togglePublish(article)" class="btn-publish">
+            <button @click="togglePublish(article)" class="action-button" :title="article.published ? 'Dépublier' : 'Publier'">
               <i class="fas" :class="article.published ? 'fa-eye-slash' : 'fa-eye'"></i>
-              {{ article.published ? 'Dépublier' : 'Publier' }}
             </button>
-            <button @click="deleteArticle(article._id)" class="btn-delete">
-              <i class="fas fa-trash"></i> Supprimer
+            <button @click="deleteArticle(article._id)" class="action-button danger" title="Supprimer">
+              <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
@@ -204,6 +203,49 @@ onMounted(fetchArticles);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(74, 158, 255, 0.1);
+  color: #4a9eff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background: rgba(74, 158, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.action-button.primary {
+  background: #4a9eff;
+  color: white;
+}
+
+.action-button.primary:hover {
+  background: #3d8ae6;
+}
+
+.action-button.danger {
+  background: rgba(255, 74, 74, 0.1);
+  color: #ff4a4a;
+}
+
+.action-button.danger:hover {
+  background: rgba(255, 74, 74, 0.2);
 }
 
 .admin-stats {
@@ -309,55 +351,16 @@ onMounted(fetchArticles);
   gap: 0.5rem;
 }
 
-.action-button, .btn-edit, .btn-publish, .btn-delete {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s;
-}
-
-.action-button.primary {
-  background: #4a9eff;
-  color: white;
-}
-
-.action-button.danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-edit {
-  background: #2a2a2a;
-  color: #4a9eff;
-}
-
-.btn-publish {
-  background: #2a2a2a;
-  color: #28a745;
-}
-
-.btn-delete {
-  background: #2a2a2a;
-  color: #dc3545;
-}
-
-.loading-spinner {
-  text-align: center;
-  padding: 2rem;
-}
-
-.error-message {
-  color: #dc3545;
-  text-align: center;
-  padding: 2rem;
-}
-
 @media (max-width: 768px) {
+  .action-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .action-button i {
+    font-size: 0.9rem;
+  }
+
   .admin-header {
     flex-direction: column;
     gap: 1rem;
