@@ -54,15 +54,15 @@ api.interceptors.response.use(
 // Méthodes API sécurisées
 export const secureApi = {
     // Articles
-    getArticles: () => api.get('/api/articles'),
-    getArticle: (id) => api.get(`/api/articles/${id}`),
-    createArticle: (data) => api.post('/api/articles', data),
-    updateArticle: (id, data) => api.put(`/api/articles/${id}`, data),
-    deleteArticle: (id) => api.delete(`/api/articles/${id}`),
+    getArticles: () => api.get('/articles'),
+    getArticle: (id) => api.get(`/articles/${id}`),
+    createArticle: (data) => api.post('/articles', data),
+    updateArticle: (id, data) => api.put(`/articles/${id}`, data),
+    deleteArticle: (id) => api.delete(`/articles/${id}`),
     
     // Authentification
-    login: (credentials) => api.post('/api/auth/login', credentials),
-    getProfile: () => api.get('/api/auth/profile'),
+    login: (credentials) => api.post('/auth/login', credentials),
+    getProfile: () => api.get('/auth/profile'),
     
     // Méthode utilitaire pour vérifier l'authentification
     isAuthenticated: () => {
