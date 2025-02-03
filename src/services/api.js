@@ -2,12 +2,14 @@ import axios from 'axios';
 import router from '../router';
 
 // Création d'une instance Axios avec la configuration de base
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 const api = axios.create({
-    baseURL: 'http://localhost:5000',
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json'
-    }
+  baseURL: API_BASE_URL,
+  withCredentials: false,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
 // Intercepteur pour les requêtes
@@ -33,17 +35,14 @@ api.interceptors.response.use(
         if (error.response) {
             // Gestion des erreurs d'authentification
             if (error.response.status === 401) {
-                // Supprimer les informations d'authentification
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 
-                // Rediriger vers la page d'accueil
                 if (router.currentRoute.value.name !== 'home') {
                     router.push('/');
                 }
             }
             
-            // Gestion des erreurs de permission
             if (error.response.status === 403) {
                 console.error('Accès non autorisé');
             }
