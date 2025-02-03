@@ -14,6 +14,12 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
@@ -28,6 +34,11 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connecté à MongoDB Atlas'))
   .catch((error) => console.error('Erreur de connexion MongoDB:', error));
+
+// Test route
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working!' });
+});
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -50,7 +61,24 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ error: err.message });
+});
+
+// Catch-all route for debugging
+app.use('*', (req, res) => {
+  console.log('Route not found:', req.originalUrl);
+  res.status(404).json({ message: `Route ${req.originalUrl} not found` });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log('Environment:', {
+    NODE_ENV: process.env.NODE_ENV,
+    MONGODB_URI: process.env.MONGODB_URI ? 'Set' : 'Not set',
+    VERCEL_URL: process.env.VERCEL_URL || 'Not set'
+  });
 });
